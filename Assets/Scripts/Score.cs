@@ -6,14 +6,19 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
-    private int score;
+    protected int score;
+    private bool playable = false;
+    [SerializeField] AudioSource scoreUp;
+    [SerializeField] AudioSource ScoreDown;
 
     public TextMeshProUGUI scoreText;
+
+    
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
-        SetScoreText();
+        SetScoreText();               
     }
 
     // Update is called once per frame
@@ -24,17 +29,34 @@ public class Score : MonoBehaviour
     }
     void SetScoreText()
     {
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = score.ToString();
     }
 
     public void IncreaseScore()
     {
-        score += 5;
+        if (playable)
+        {
+            score += 5;
+            scoreUp.Play();
+        }
     }
 
     public void DecreaseScore()
     {
-        score -= 5;
+        if (playable)
+        {
+            score -= 5;
+            ScoreDown.Play();
+        }
+    }
+
+    public void StartGame()
+    {
+        if (playable == false)
+        {
+            playable = true;
+            Debug.Log("The game is now playable.");
+        }
     }
 
     void ClampScore()
@@ -42,10 +64,12 @@ public class Score : MonoBehaviour
         if (score < 0)
         {
             score = 0;
+            Debug.Log("Going below zero resets you to zero.");
         }
         else if (score > 999)
         {
             score = 999;
+            Debug.Log("Going above 999 resets you to 999.");
         }
     }
 
