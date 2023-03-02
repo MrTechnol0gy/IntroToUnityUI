@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading;
 
 public class Score : MonoBehaviour
 {
     protected int score;
     private bool playable = false;
+    private string startMessage = "Push Start To start!";
     [SerializeField] AudioSource scoreUp;
     [SerializeField] AudioSource ScoreDown;
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI debugText;
 
     
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
-        SetScoreText();               
+        SetScoreText();   
+        debugText.text = startMessage.ToString();            
     }
 
     // Update is called once per frame
@@ -38,6 +42,7 @@ public class Score : MonoBehaviour
         {
             score += 5;
             scoreUp.Play();
+            debugText.text = "You've gained 5 points!".ToString();
         }
     }
 
@@ -47,6 +52,7 @@ public class Score : MonoBehaviour
         {
             score -= 5;
             ScoreDown.Play();
+            debugText.text = "You've lost 5 points!".ToString();
         }
     }
 
@@ -54,8 +60,8 @@ public class Score : MonoBehaviour
     {
         if (playable == false)
         {
-            playable = true;
-            Debug.Log("The game is now playable.");
+            playable = true;            
+            debugText.text = "The game is now playable.".ToString();
         }
     }
 
@@ -63,19 +69,20 @@ public class Score : MonoBehaviour
     {
         if (score < 0)
         {
-            score = 0;
-            Debug.Log("Going below zero resets you to zero.");
+            score = 0;            
+            debugText.text = "Going below zero resets you to zero.".ToString();
         }
         else if (score > 999)
         {
-            score = 999;
-            Debug.Log("Going above 999 resets you to 999.");
+            score = 999;            
+            debugText.text = "Going above 999 resets you to 999.".ToString();
         }
     }
 
     public void QuitGame()
-    {
-        Debug.Log("Application will now close.");
+    {        
+        debugText.text = "Application will now close.".ToString();
+        Thread.Sleep(3000);
         Application.Quit();
     }
 }
